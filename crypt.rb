@@ -8,6 +8,7 @@ module Fubar
   #
   # char *crypt(const char *key, const char *salt);
 
+  #ffi_lib '/usr/lib/libc.dylib'
   ffi_lib 'c'
 
   attach_function :crypt, [ :string, :string ], :string
