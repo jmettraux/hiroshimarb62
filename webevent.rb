@@ -36,12 +36,8 @@ class WebServer
 
           _, block = @paths.find { |pa, bl| pa == path }
 
-          icode, scode, text =
-            if block
-              [ 200, 'OK', block.call ]
-            else
-              [ 404, 'Not Found', '.' ]
-            end
+          icode, scode, text = [ 404, 'Not Found', '.' ]
+          icode, scode, text = [ 200, 'OK', block.call ] if block
 
           Ev.evbuffer_add(buffer, text, text.length)
           Ev.evhttp_send_reply(request, icode, scode, buffer)
@@ -50,10 +46,7 @@ class WebServer
 
           puts "GET #{path} #{icode} took #{(Time.now - t) * 1000.0}ms"
 
-        rescue => err
-
-          p err
-        end
+        rescue => err; p err; end
       end
   end
 
